@@ -16,7 +16,6 @@ HR data is challenging to work with since people are complex.  Many of the group
 
 I'm developing this in R since the program is free and I find it easier to work with than other langauges.  I am specifically using common functions and small, iterative steps so the code is as easy to understand for people new to R.  
 
-
 ##Roadmap
 
 - [X] Create a space to experiment with this idea (this github)
@@ -24,6 +23,6 @@ I'm developing this in R since the program is free and I find it easier to work 
 - [X] Develop a method in R for creating dummy data based on randomization 
 - [X] Have the system accept variable numbers of categories
 - [X] Have the system create realistic dates (hire, term, etc.)
-- [ ] Create a better way to enter start and term variables (possibly asking for average turnover?)
 - [ ] Implement something to create random names (possibly related to gender?)
 - [ ] Have the system generate job titles (possible related to level?)
+- [ ] Create a better way to enter start and term variables (possibly asking for average turnover?)
