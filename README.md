@@ -13,3 +13,17 @@ This project aims to solve all of those issues, in an easier method that trying 
 From that the system will generate a spreadsheet with as many fake employees as you'd like, all with randomized demographic information but in (about) the percentages listed.
 
 HR data is challenging to work with since people are complex.  Many of the groupings we use have the majority of the population in a few categories, and other categories with very few people in them.  By creating a blanced dataset with appropriate percentages, it becomes much easiser to check how our analytics and graphs will respond to real-world groupings.
+
+I'm developing this in R since the program is free and I find it easier to work with than other langauges.  I am specifically using common functions and small, iterative steps so the code is as easy to understand for people new to R.  
+
+
+##Roadmap
+
+- [X] Create a space to experiment with this idea (this github)
+- [X] Implement this as a proof of concept in excel
+- [X] Develop a method in R for creating dummy data based on randomization 
+- [X] Have the system accept variable numbers of categories
+- [X] Have the system create realistic dates (hire, term, etc.)
+- [ ] Create a better way to enter start and term variables (possibly asking for average turnover?)
+- [ ] Implement something to create random names (possibly related to gender?)
+- [ ] Have the system generate job titles (possible related to level?)
