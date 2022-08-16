@@ -63,8 +63,8 @@ for (val in 2:nrow(GenderLookup))
 LHDD <- subset(LHDD, select = - c(GenderRand))  
 
 
-################# CREATING Race RECORDS #################
-## 
+################# CREATING RACE RECORDS #################
+## The racial categorization is based on the United States Department of Labor's Equal Employment Opportunity breakdown https://www.dol.gov/agencies/ofccp/faqs/EEO-Tab-FAQs#Q5
 
 ## Create a data frame based on the ratios in the categories.csv document
 RaceLookup <- data.frame(RaceCategories = Categories$RaceCategories, RaceRatio = Categories$RaceRatio)
@@ -92,7 +92,7 @@ LHDD <- subset(LHDD, select = - c(RaceRand))
 
 
 ################# CREATING Department RECORDS #################
-## 
+## Departments and Divisions are unique to each organization.  This is a basic example to make understanding easier.
 
 ## Create a data frame based on the ratios in the categories.csv document
 DepartmentLookup <- data.frame(DepartmentCategories = Categories$DepartmentCategories, DepartmentRatio = Categories$DepartmentRatio)
@@ -122,5 +122,3 @@ LHDD <- subset(LHDD, select = - c(DepartmentRand))
 ################# EXPORT TO CSV #################
 
 write.csv(LHDD,"D:/CompensationScience/LookHereDummyData/Example.csv", row.names = TRUE)
-
-
