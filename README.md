@@ -24,5 +24,6 @@ I'm developing this in R since the program is free and I find it easier to work 
 - [X] Have the system accept variable numbers of categories
 - [X] Have the system create realistic dates (hire, term, etc.)
 - [ ] Implement something to create random names (possibly related to gender?)
+- [ ] Develop something to create things like compensation data, related to level
 - [ ] Have the system generate job titles (possible related to level?)
 - [ ] Create a better way to enter start and term variables (possibly asking for average turnover?)
