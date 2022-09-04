@@ -14,7 +14,7 @@ From that the system will generate a spreadsheet with as many fake employees as 
 
 HR data is challenging to work with since people are complex.  Many of the groupings we use have the majority of the population in a few categories, and other categories with very few people in them.  By creating a blanced dataset with appropriate percentages, it becomes much easiser to check how our analytics and graphs will respond to real-world groupings.
 
-I'm developing this in R since the program is free and I find it easier to work with than other langauges.  I am specifically using common functions and small, iterative steps so the code is as easy to understand for people new to R.  
+I'm developing this in R since the program is free and I find it easier to work with than other langauges.  I am specifically using common functions and small, iterative steps so the code is as easy to understand for people new to R.  I'm also not using any libraries so it's easier to drop into part of a larger coding project (also so that it doesn't break when a library is updated).
 
 ## Roadmap
 
