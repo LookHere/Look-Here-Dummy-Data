@@ -1,5 +1,8 @@
+################# PREPARE THE LOOK HERE DUMMY DATA #################
+## The "look here dummy data" generator is it's own project.  To see the other functionality here: https://github.com/LookHere/Look-Here-Dummy-Data
+
 ## Please enter the number of employees you'd like it to generate, the earliest start date, and how many years of data you'd like (anyone with a term date after today is considered active).
-Headcount <- 200
+Headcount <- 20000
 EarliestStartDate <- "2018-01-01"
 YearsOfData <- 5
 
@@ -12,7 +15,7 @@ EmployeeID <- seq(from = 10000000, to = 10000000 + Headcount -1)
 ## This will make it easier to see the data at any point.
 LHDD <- data.frame(EmployeeID)
 
-## Import categories.csv so it knows what demographics you wantt; header = TRUE puts the first row as the column names
+## Import categories.csv so it knows what demographics you want; header = TRUE puts the first row as the column names
 Categories <- read.csv("D:/CompensationScience/LookHereDummyData/categories.csv", header = TRUE)
 
 
@@ -121,4 +124,4 @@ LHDD <- subset(LHDD, select = - c(DepartmentRand))
 
 ################# EXPORT TO CSV #################
 
-write.csv(LHDD,"D:/CompensationScience/LookHereDummyData/Example.csv", row.names = TRUE)
+write.csv(LHDD,"D:/CompensationScience/LookHereDummyData/OutputExample.csv", row.names = TRUE)
