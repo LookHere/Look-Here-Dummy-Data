@@ -28,8 +28,8 @@ I developed this in R since the program is free and easy to work in.  I am speci
 - [X] Develop a method in R for creating categorical (gender, race, etc.) dummy data based on randomization 
 - [X] Have the system accept variable numbers of categories
 - [X] Have the system create realistic dates (hire, term, etc.)
+- [X] Develop compensation data, related to level
 - [ ] Creation random names (possibly related to gender)
-- [ ] Develop compensation data, related to level
 - [ ] Generate job titles, related to level
 - [ ] Generate benefit and dependent information
 - [ ] Create a better way to enter start and termination variables (possibly asking for average turnover)
