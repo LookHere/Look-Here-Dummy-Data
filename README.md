@@ -11,9 +11,11 @@ This method lets you alter a [text file](https://github.com/LookHere/Look-Here-D
 1) the available options for that demographic (for "race" options may be listed as "American Indian/Alaskan Native (not Hispanic or Latino)", "Asian (not Hispanic or Latino)", etc.) 
 2) the percentage of the final data set that should have each option (1.3%, 5.9%, etc.)
 
+For the level of the employee (entry level, manager, director, etc.) the system will also generate compensation amounts.  The compensation amounts are randomly pulled from a bell curve around the compensation target related to each level (and then rounded).  The final results will show most employees near their target, with fewer employees having more extreme compensations.
+
 <kbd><img src="https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/TextFileExample.png" width=100% height=100%></kbd>
 
-The system will use the text file to generate a spreadsheet with as many fake employees as requested, all with randomized demographic information.  The total employees with each demographic will be (about) the percentages listed in the text file.  In benchmark tests it can generating [a file of 20,000 employees](https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/OutputExample.csv) in 8.5 seconds into a CSV file that's 1.779 megabytes. 
+The system will use the text file to generate a spreadsheet with as many fake employees as requested, all with randomized demographic information.  The total employees with each demographic will be (about) the percentages entered in the text file.  In benchmark tests it can generating [20,000 employees](https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/OutputExample.csv) in 6.02 seconds into a CSV file that's 2.14 MB. 
 
 <kbd><img src="https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/OutputExample.jpg" width=100% height=100%></kbd>
 
