@@ -23,6 +23,8 @@ HR data is challenging to work with since people are complex.  Many of the group
 
 I developed this in R since the program is free and easy to work in.  I am specifically using common functions and small, iterative steps so the code is as easy to understand for people new to R.  I'm also not using any libraries so it is easy to drop this code into part of a larger project (also so that it doesn't break when a library is updated).
 
+You can run the [r code](https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/LookHereDummyData.R) yourself if you link it to a [text file](https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/Categories.csv) that has the categories and percentages you're looking for.
+
 ## Roadmap
 
 - [X] Create a space to experiment with this idea (this github)
@@ -35,3 +37,4 @@ I developed this in R since the program is free and easy to work in.  I am speci
 - [ ] Generate job titles, related to level
 - [ ] Generate benefit and dependent information
 - [ ] Create a better way to enter start and termination variables (possibly asking for average turnover)
+- [ ] Develop this into a package so it's easier to run
