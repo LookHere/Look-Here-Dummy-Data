@@ -21,11 +21,61 @@ The system will use the text file to generate a spreadsheet with as many fake em
 
 HR data is challenging to work with since people are complex.  Many of the groupings we use have the majority of the population in a few categories, and other categories with very few people in them.  By creating a balanced dataset with appropriate percentages, it becomes much easier to see how our analytics and graphs will respond to real-world groupings.
 
+# How To Run This (Beginner User) 
+This project was designed so a non-technical person could create an unlimited number of fake workers, all customized to their specific categories (and the percentage of employees in each category).  With only a beginner level of knowledge in R this should be very easy.  
+
 I developed this in R since the program is free and easy to work in.  I am specifically using common functions and small, iterative steps so the code is as easy to understand for people new to R.  I'm also not using any libraries so it is easy to drop this code into part of a larger project (also so that it doesn't break when a library is updated).
 
-You can run the [r code](https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/LookHereDummyData.R) yourself if you link it to a [text file](https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/Categories.csv) that has the categories and percentages you're looking for.
+If you have no knowledge of R, [this video](https://www.youtube.com/watch?v=_V8eKsto3Ug) shows you how to download the software and all of the basics needed to integrate R into your toolbox.
 
-## Roadmap
+You can download the [r code](https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/LookHereDummyData.R) to run the project yourself.  Once you do, just make sure you link it your download of this [text file](https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/Categories.csv). The text file is where you’ll identify the categories and percentages you’re customizing.  You'll do this in the very first section of the r code.  If you want to export it, you can tell it where to generate the file in the very last section of the r code.
+
+# Nuts and Bolts (Advanced User)
+This code is designed to be integrated into larger projects, so you can easily generate dummy data as needed.  As such, it doesn’t need any libraries.  Each demographic section is modular and doesn’t rely on any other section (the employee ID section is needed since it creates the dataframe).
+
+Here is a brief explanation of how each section works.  More details are in the comments with the code.  If you’d like to built out another part of this an integrate it into the project, let me know!
+
+## Employee ID 
+This sections decides the overall structure of the headcount being generated.  It decides the total headcount, the earliest start date, and how many years of data should be generated.  
+
+This section looks at the <i>categories.csv</i> file to pull in the demographic choices from the user.  It also creates the dataframe that all other sections hang their demographic data on.  
+
+## Dates
+The dates section generates two dates, the StartDate (hire date) and EndDate (termination date).
+
+The StartDate is a random number between the EarliestStartDate and (the YearsOfData * 365.25 days).
+
+The EndDate is a random number between the StartDate and (the YearsOfData * 365.25 days).
+
+Anyone with an EndDate after “today” will have their EndDate removed and are considered active.
+
+## Gender
+The gender categories from the <i>categories.csv</i> file are brought in.  
+
+Each ratio is divided by the sum of all ratios, to make sure all ratios add up to 100%.  
+
+Then each ratio is stacked on top of the one before it, so the maximum of the previous ratio is the start of the next one.  This is known as a running total.
+A random number between 0% and 100% is created for each record.  
+
+If the random number is between the minimum and maximum of the first ratio, then the employee gets that demographic.  If it’s between the minimum and maximum of the second ratio, then the employee gets that ratio.  This continues for as many categories are entered.  The number of categories can be changed by the user in the <i>categories.csv</i> file.
+
+## Race and Department
+Both the Race and Department sections work similarly to the Gender section.
+
+## Job Level and Compensation
+
+The Job Level is created in a similar way to the Gender section.  
+
+The Job Level also brings in a target compensation amount.  If we’re trying to mirror live data, this would be the average pay for employees at that level.
+
+The target compensation amount is altered by a formula that picks a random point on a bell curve around it.  That means that most compensations amounts will be close to the target (average) and fewer compensation amounts will be outlines.  This should somewhat mirror actual compensation distributions in a healthy incentive plan.
+
+After the compensation amount for each employee is decided, it is rounded to the nearest thousand.  
+
+## Export to CSV
+The last section will take the final file and export it to a .csv file on the users computer where it can be opened with excel.  
+
+# Roadmap
 
 - [X] Create a space to experiment with this idea (this github)
 - [X] Implement this as a proof of concept in [excel](https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/ExcelProofOfConcept.ods)
