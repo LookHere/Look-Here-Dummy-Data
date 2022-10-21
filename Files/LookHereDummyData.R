@@ -1,24 +1,32 @@
-################# PREPARE THE LOOK HERE DUMMY DATA #################
-## This is version 7 of the "look here dummy data" generator own project.  For the most updated code and to understand the context go here: https://github.com/LookHere/Look-Here-Dummy-Data
+################# EMPLOYEE ID - PREPARING SPACE FOR THE LOOK HERE DUMMY DATA #################
+## This is version 8 of the "look here dummy data" generator own project.  For the most updated code and to understand the context go here: https://github.com/LookHere/Look-Here-Dummy-Data
+## This project is developed to be very easy for beginner users to run and integrate into projects.  As such, it does not require any libraries, each demographic is modular (doesn't rely on any other demographic), and the code is very basic with very heavy commenting. 
 
 ## Please enter the number of employees you'd like it to generate, the earliest start date, and how many years of data you'd like (anyone with a term date after today is considered active and the term date is removed).
-Headcount <- 20000
+Headcount <- 2000
 EarliestStartDate <- "2018-01-01"
 YearsOfData <- 5
 
+## Set the working directory.  This is where you'll put the categories.csv (which determains the demographics you want) and will be where the output file is created.
+setwd("C:/CompensationScience/LookHereDummyData")
+
+## This code uploads the csv file "categories.csv" where you enter the demographics you want.  You can download a template for this file here: (https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/Categories.csv) and save that as a csv file in the working directory.
+## Header = TRUE identifies the first row as the column names
+Categories <- read.csv("Categories.csv", header = TRUE)
+
+## This code pulls in the list of names
+NameDatabase <- read.csv("NameDatabase.csv", header = TRUE)
+
 ## Generates Employee ID Numbers for everyone
-## For Employee IDs (sometimes known as EmplID) it's best practice to start headcounts at a very large number like 10,000,000 so there is never a leading zero
+## For Employee IDs (sometimes known as EmplID) it's best practice to start headcounts at a very large number like 10,000,000 so there is never a leading zero.  Don't make the ID numbers related to anything (ex. all contractors start with a 9 and all full time workers start with a 1) because that breaks when someone transfers.
 EmployeeID <- seq(from = 10000000, to = 10000000 + Headcount -1)
 
 ## Creates a dataframe with just the employee ID numbers.  
 ## Everything will be moved into this as it's built.  
 LHDD <- data.frame(EmployeeID)
 
-## Import categories.csv so it knows what demographics you want; header = TRUE identifies the first row as the column names
-Categories <- read.csv("D:/CompensationScience/LookHereDummyData/categories.csv", header = TRUE)
 
-
-################# CREATING DATE RECORDS #################
+################# DATES - CREATING DATE RECORDS #################
 
 ## Creates a start date by starting with the EarliestStartDate and adding a random number to that between zero and (YearsOfData * 365.25 days in a year).
 LHDD$StartDate <- as.Date(runif(Headcount, min=0, max=YearsOfData*365.25), origin=EarliestStartDate)
@@ -57,10 +65,10 @@ LHDD$GenderRand <- runif(Headcount, min=0, max=1)
 LHDD$Gender<-GenderLookup[1,1]
 ## Runs a "for loop" the same number of times as there are types of demographic categories listed, starting with the second category (since the first is already the category for every row)
 for (val in 2:nrow(GenderLookup))
-  {
+{
   ## Checks to see if the Random is greater than the Running Total of one record earlier; if it is overwrite that with the current demographic
   LHDD$Gender <- ifelse(LHDD$GenderRand>GenderLookup[val-1,3], GenderLookup[val,1],LHDD$Gender)
-  }
+}
 ## Deletes the randomizer since we are done using it
 LHDD <- subset(LHDD, select = - c(GenderRand))  
 
@@ -167,6 +175,63 @@ for(i in 1:nrow(LHDD)) {
   LHDD$JobLevelCompTarget[i]<- round(LHDD$JobLevelCompTarget[i], digits = -3)
 }
 
+################# NAME AND LOCATION #################
+## This code creates a name and location for each employee.  The name and location are connected, but this is (purposely) not correlated to race.
+## The list of names and countries is just what was easily found on the internet. It is in no way balanced so some countries are over represented.  
+## As with some live data, the format of the names is inconsistent between locations. Also some locations have names in the origonal character script.
+
+
+## Creates a random variable for each employee that will decide their Name
+LHDD$NameRand <- runif(Headcount, min=0, max=1)
+
+## If there is no "Male" and "Female" gender already created, it defaults everyone to NonBinary so the names will be pulled randomly without regard to gender
+if ('Gender' %in% names(LHDD) && any(LHDD$Gender=="Male") && any(LHDD$Gender=="Female")) {
+    LHDD$TempGender <- LHDD$Gender
+  } else {
+    LHDD$TempGender <- "NonBinary"
+  }
+
+## Sort the name database by location and gender
+NameDatabase <- NameDatabase[with(NameDatabase, order(Gender,Country)),]
+
+## Find the first and last row number for the female, male, and non-binary populations
+MinFemale <- min(which(NameDatabase$Gender == 'Female'))
+MaxFemale <- max(which(NameDatabase$Gender == 'Female'))
+DiffFemale <- MaxFemale - MinFemale 
+
+MinMale <- min(which(NameDatabase$Gender == 'Male'))
+MaxMale <- max(which(NameDatabase$Gender == 'Male'))
+DiffMale <- MaxMale - MinMale
+
+MinNonB <- min(MinFemale, MinMale)
+MaxNonB <- max(MaxFemale, MaxMale)
+DiffNonB <- MaxNonB - MinNonB
+
+## Create a lookup table with the min and max for each category
+NameLookup <- data.frame (Female = c(MinFemale, MaxFemale, DiffFemale),
+                          Male = c(MinMale, MaxMale, DiffMale),
+                          NonBinary = c(MinNonB, MaxNonB, DiffNonB)
+                          )
+
+## Look at the gender of each row, and return a name and location for that gender
+for(i in 1:nrow(LHDD)) {
+  ## Find the gender of the person on this row 
+  RowGender <- LHDD$TempGender[i]
+  ## Use the gender to find the min and max rows to use from the NameLookup
+  NameMin <- NameLookup[1,RowGender]
+  NameDiff <- NameLookup[3,RowGender]
+  ## To find a random name over the range decided, multiply the random number by the difference between the max and min.  Then add it to the min and round down to the nearest integer.
+  NameRow <- round((LHDD$NameRand[i] * NameDiff) +  NameMin, digits = 0)
+  ## Use the NameRow to pull in the information from the right row of the NameDatabase
+  LHDD$NameFirst[i] <- NameDatabase$Name[NameRow]
+  LHDD$NameFirstOrigCharacter[i] <- NameDatabase$OrigCharacter[NameRow]
+  LHDD$Location[i] <- NameDatabase$Country[NameRow]
+}
+
+## Deletes the randomizer and temp gender since we are done using them
+LHDD <- subset(LHDD, select = - c(NameRand, TempGender)) 
+
 ################# EXPORT TO CSV #################
 
-write.csv(LHDD,"D:/CompensationScience/LookHereDummyData/OutputExample.csv", row.names = TRUE)
+## This will export the final file into the working directory you set in the first step.  It will create a new file (or overwrite the current file) called "OutputLookHereDummyData.csv". 
+write.csv(LHDD,"OutputLookHereDummyData.csv", row.names = TRUE)
