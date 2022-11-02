@@ -17,7 +17,7 @@ The system will also generate compensation amount based on the employee level (e
 
 <kbd><img src="https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/Images/SampleCategories.png" width=100% height=100%></kbd>
 
-The system will use the text file to generate a spreadsheet with as many fake employees as requested, all with randomized demographic information.  The total employees with each demographic will be (about) the percentages entered in the text file.  In benchmark tests it can generating [20,000 employees](https://github.com/LookHere/Look-Here-Dummy-Data/tree/main/Files/SampleOutput) in 6.02 seconds into a CSV file that's 2.14 MB. 
+The system will use the text file to generate a spreadsheet with as many fake employees as requested, all with randomized demographic information.  The total employees with each demographic will be (about) the percentages entered in the text file.  In benchmark tests it can generating [20,000 employees](https://github.com/LookHere/Look-Here-Dummy-Data/tree/main/Files/SampleOutput) in 8 seconds into a CSV file that's 2.6 MB. 
 
 <kbd><img src="https://github.com/LookHere/Look-Here-Dummy-Data/blob/main/Files/Images/SampleOutput.png" width=100% height=100%></kbd>
 
