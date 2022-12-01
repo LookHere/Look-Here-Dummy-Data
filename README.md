@@ -112,7 +112,11 @@ The last section will take the final file and export it to a .csv file on the us
 - [ ] Build out location so the user can decide percentages of each location
 - [ ] Generate job titles, related to level
 - [ ] Generate benefit and dependent information
+- [ ] Generate paroll data
 - [ ] Generate a table of actions (hire, term, promotion, transfer, etc.)
+- [ ] Time keeping data (hours worked, time off, etc.)
+- [ ] Generate canidate data for a recruiting funnel
 - [ ] Create a better way to enter start and termination variables (possibly asking for average turnover)
 - [ ] Create a way to take the unbiased dummy data and make it biased, to test if analytics and dashboards can identify the bias
 - [ ] Develop this into a package so it's easier to run
+- [ ] Develop this into a shiny page so it doesn't have to be run in R
