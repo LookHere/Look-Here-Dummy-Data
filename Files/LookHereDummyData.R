@@ -1,5 +1,5 @@
 ################# EMPLOYEE ID - PREPARING SPACE FOR THE LOOK HERE DUMMY DATA #################
-## This is version 9 of the "look here dummy data" generator own project.  For the most updated code and to understand the context go here: https://github.com/LookHere/Look-Here-Dummy-Data
+## This is version 10 of the "look here dummy data" generator own project.  For the most updated code and to understand the context go here: https://github.com/LookHere/Look-Here-Dummy-Data
 ## This project is developed to be very easy for beginner users to run and integrate into projects.  As such, it does not require any libraries, each demographic is modular (doesn't rely on any other demographic), and the code is very basic with very heavy commenting. 
 
 ## Please enter the number of employees you'd like it to generate, the earliest start date, and how many years of data you'd like (anyone with a term date after today is considered active and the term date is removed).
@@ -65,7 +65,7 @@ LHDD$GenderRand <- runif(Headcount, min=0, max=1)
 ## Everyone is considered non-binary unless specifically identified as female or male.
 
 # Lists of words that refer to females
-WomanWords <- c('female',  'woman',  'lady',  'female',  'girl',  'madam',  'gentlewoman',  'madame',  'dame',  'gal',  'maiden',  'grua',  'emakume',  'жанчына',  
+WomanWords <- c('female',  'woman',  'lady',  'girl',  'madam',  'gentlewoman',  'madame',  'dame',  'gal',  'maiden',  'grua',  'emakume',  'жанчына',  
                 'žena',  'жена',  'dona',  'donna',  'žena',  'žena',  'kvinde',  'vrouw',  'naine',  'nainen',  'femme',  'frou',  'muller',  'Frau',  'γυναίκα',  
                 'gynaíka',  'nő',  'Kona',  'bean',  'donna',  'sieviete',  'moteris',  'Fra',  'жена',  'mara',  'kvinne',  'kobieta',  'mulher',  'femeie',  
                 'женщина',  'zhenshchina',  'boireannach',  'жена',  'zhena',  'žena',  'ženska',  'mujer',  'kvinna',  'хатын-кыз',  'zhinka',  'Жінка',  'fenyw',  
@@ -76,7 +76,7 @@ WomanWords <- c('female',  'woman',  'lady',  'female',  'girl',  'madam',  'gen
                 'wanita', 'wahine', 'fafine', 'awéwé', 'virino', 'fanm', 'femina', 'imra ah')
 
 # List of words that refer to males
-ManWords <- c('male', 'man','guy','gentleman', 'male', 'dude', 'lad', 'fella', 'gent', 'njeri', 'gizon', 'чалавек', 'čovjek', 'мъж', 'home', 'omu', 'čovjek', 
+ManWords <- c('male', 'man','guy','gentleman', 'dude', 'lad', 'fella', 'gent', 'njeri', 'gizon', 'чалавек', 'čovjek', 'мъж', 'home', 'omu', 'čovjek', 
               'muž', 'mand', 'man', 'mees', 'mies', 'homme', 'man', 'home', 'Mann', 'ándras', 'άνδρας', 'Férfi', 'Maður', 'fear', 'uomo', 'vīrietis', 'vyras', 
               'Mann', 'човек', 'bniedem', 'Mann', 'człowiek', 'homem', 'om', 'человек', 'chelovek', 'dhuine', 'chovek', 'човек', 'muž', 'Moški', 'hombre', 'man', 
               'кеше', 'מענטש', 'insan', 'মানুষ', 'rén', '人', 'კაცი', 'માણસ', 'आदमी', 'txiv neej', 'おとこ', 'ವ್ಯಕ್ತಿ', 'адам', 'បុរសម្នាក់', '남자', 'namja', 
@@ -89,22 +89,41 @@ WomanDF <- data.frame(WomanWords,"woman")
 ManDF <- data.frame(ManWords,"man")
 
 # Rename the columns
-names(WomanDF) <- c("Term", "Gender")
-names(ManDF) <- c("Term", "Gender")
+names(WomanDF) <- c("GenderClean", "GenderStandard")
+names(ManDF) <- c("GenderClean", "GenderStandard")
 
 # Combine the two data frames
 GenderWords <- rbind(WomanDF, ManDF)
 
+# Look up each user entered gender and find the Standard equivalent
+
+# Creates a column that's a lower case version of what the user entered (since our lookup table is lower case)
+GenderLookup$GenderClean <- tolower(GenderLookup$GenderCategories) 
+# Lookup the Standard equivalent gender based on what the user entered
+GenderLookup <- merge(GenderWords, GenderLookup, by="GenderClean", all.y = TRUE)
+# For anyone who isn't female or male, they are nonbinary
+GenderLookup$GenderStandard[is.na(GenderLookup$GenderStandard)] <- "nonbinary"
+
 # Delete the old files that are no longer needed
-rm(WomanWords, ManWords, WomanDF, ManDF)
+rm(WomanWords, ManWords, WomanDF, ManDF, GenderWords)
+GenderLookup <- subset(GenderLookup, select = - c(GenderClean))  
+# Reorder the columns
+GenderLookup <- GenderLookup[ , c(2, 3, 4, 1)] 
+# Reorder the rows
+GenderLookup <- GenderLookup[order(GenderLookup$GenderRunning), ]
 
+### Creates an Standard Gender for everyone
 
+## Defaults all records to the first demographic
+LHDD$GenderStandard<-GenderLookup[1,4]
+## Runs a "for loop" the same number of times as there are types of demographic categories listed, starting with the second category (since the first is already the category for every row)
+for (val in 2:nrow(GenderLookup))
+{
+  ## Checks to see if the Random is greater than the Running Total of one record earlier; if it is overwrite that with the current demographic
+  LHDD$GenderStandard <- ifelse(LHDD$GenderRand>GenderLookup[val-1,3], GenderLookup[val,4],LHDD$GenderStandard)
+}
 
-
-
-
-
-
+### Creates a gender for everyone based on the user's terms
 
 ## Defaults all records to the first demographic
 LHDD$Gender<-GenderLookup[1,1]
@@ -114,6 +133,8 @@ for (val in 2:nrow(GenderLookup))
   ## Checks to see if the Random is greater than the Running Total of one record earlier; if it is overwrite that with the current demographic
   LHDD$Gender <- ifelse(LHDD$GenderRand>GenderLookup[val-1,3], GenderLookup[val,1],LHDD$Gender)
 }
+
+
 ## Deletes the randomizer since we are done using it
 LHDD <- subset(LHDD, select = - c(GenderRand))  
 
@@ -231,11 +252,7 @@ LHDD$NameRand <- runif(Headcount, min=0, max=1)
 
 ## If there is no "Male" and "Female" gender already created, it defaults everyone to NonBinary so the names will be pulled randomly without regard to gender
 
-
-
-
-
-
+##########################~~~~~~~~~~~~~ Change gender to GenderStandard   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 if ('Gender' %in% names(LHDD) && any(LHDD$Gender=="Male") && any(LHDD$Gender=="Female")) {
     LHDD$TempGender <- LHDD$Gender
