@@ -1,5 +1,5 @@
 ################# EMPLOYEE ID - PREPARING SPACE FOR THE LOOK HERE DUMMY DATA #################
-## This is version 10 of the "look here dummy data" generator own project.  For the most updated code and to understand the context go here: https://github.com/LookHere/Look-Here-Dummy-Data
+## This is version 11 of the "look here dummy data" generator own project.  For the most updated code and to understand the context go here: https://github.com/LookHere/Look-Here-Dummy-Data
 ## This project is developed to be very easy for beginner users to run and integrate into projects.  As such, it does not require any libraries, each demographic is modular (doesn't rely on any other demographic), and the code is very basic with very heavy commenting. 
 
 ## Please enter the number of employees you'd like it to generate, the earliest start date, and how many years of data you'd like (anyone with a term date after today is considered active and the term date is removed).
@@ -85,8 +85,8 @@ ManWords <- c('male', 'man','guy','gentleman', 'dude', 'lad', 'fella', 'gent', '
              mtu', 'umntu', 'ọkunrin', 'indoda', 'lalaki', 'lalaki', 'kāne', 'manusia', 'wong', 'olona', 'lelaki', 'tangata', 'tamaloa', 'lalaki', 'viro', 'nonm', 'homine')
 
 # Create female and male data frames, with one column being "woman" and one "man", respective 
-WomanDF <- data.frame(WomanWords,"woman")
-ManDF <- data.frame(ManWords,"man")
+WomanDF <- data.frame(WomanWords,"Female")
+ManDF <- data.frame(ManWords,"Male")
 
 # Rename the columns
 names(WomanDF) <- c("GenderClean", "GenderStandard")
@@ -102,7 +102,7 @@ GenderLookup$GenderClean <- tolower(GenderLookup$GenderCategories)
 # Lookup the Standard equivalent gender based on what the user entered
 GenderLookup <- merge(GenderWords, GenderLookup, by="GenderClean", all.y = TRUE)
 # For anyone who isn't female or male, they are nonbinary
-GenderLookup$GenderStandard[is.na(GenderLookup$GenderStandard)] <- "nonbinary"
+GenderLookup$GenderStandard[is.na(GenderLookup$GenderStandard)] <- "NonBinary"
 
 # Delete the old files that are no longer needed
 rm(WomanWords, ManWords, WomanDF, ManDF, GenderWords)
@@ -252,10 +252,8 @@ LHDD$NameRand <- runif(Headcount, min=0, max=1)
 
 ## If there is no "Male" and "Female" gender already created, it defaults everyone to NonBinary so the names will be pulled randomly without regard to gender
 
-##########################~~~~~~~~~~~~~ Change gender to GenderStandard   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-if ('Gender' %in% names(LHDD) && any(LHDD$Gender=="Male") && any(LHDD$Gender=="Female")) {
-    LHDD$TempGender <- LHDD$Gender
+if ('GenderStandard' %in% names(LHDD) && any(LHDD$GenderStandard=="Male") && any(LHDD$GenderStandard=="Female")) {
+    LHDD$TempGender <- LHDD$GenderStandard
   } else {
     LHDD$TempGender <- "NonBinary"
   }
@@ -297,8 +295,8 @@ for(i in 1:nrow(LHDD)) {
   LHDD$Location[i] <- NameDatabase$Country[NameRow]
 }
 
-## Deletes the randomizer and temp gender since we are done using them
-LHDD <- subset(LHDD, select = - c(NameRand, TempGender)) 
+## Deletes the randomizer, temp gender, and GenderStandard since we are done using them
+LHDD <- subset(LHDD, select = - c(NameRand, TempGender,GenderStandard)) 
 
 ################# EXPORT TO CSV #################
 
