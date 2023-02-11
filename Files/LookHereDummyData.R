@@ -1,5 +1,5 @@
 ################# EMPLOYEE ID - PREPARING SPACE FOR THE LOOK HERE DUMMY DATA #################
-## This is version 8 of the "look here dummy data" generator own project.  For the most updated code and to understand the context go here: https://github.com/LookHere/Look-Here-Dummy-Data
+## This is version 9 of the "look here dummy data" generator own project.  For the most updated code and to understand the context go here: https://github.com/LookHere/Look-Here-Dummy-Data
 ## This project is developed to be very easy for beginner users to run and integrate into projects.  As such, it does not require any libraries, each demographic is modular (doesn't rely on any other demographic), and the code is very basic with very heavy commenting. 
 
 ## Please enter the number of employees you'd like it to generate, the earliest start date, and how many years of data you'd like (anyone with a term date after today is considered active and the term date is removed).
@@ -60,6 +60,51 @@ GenderLookup$GenderRatio<- GenderLookup$GenderRatio/sum(GenderLookup$GenderRatio
 GenderLookup$GenderRunning <- cumsum(GenderLookup$GenderRatio)
 ## Creates a random variable for each employee that will decide their gender
 LHDD$GenderRand <- runif(Headcount, min=0, max=1)
+
+## Identifies if what was entered by the users is a female or male . This is useful later when we connect names to them.
+## Everyone is considered non-binary unless specifically identified as female or male.
+
+# Lists of words that refer to females
+WomanWords <- c('female',  'woman',  'lady',  'female',  'girl',  'madam',  'gentlewoman',  'madame',  'dame',  'gal',  'maiden',  'grua',  'emakume',  'жанчына',  
+                'žena',  'жена',  'dona',  'donna',  'žena',  'žena',  'kvinde',  'vrouw',  'naine',  'nainen',  'femme',  'frou',  'muller',  'Frau',  'γυναίκα',  
+                'gynaíka',  'nő',  'Kona',  'bean',  'donna',  'sieviete',  'moteris',  'Fra',  'жена',  'mara',  'kvinne',  'kobieta',  'mulher',  'femeie',  
+                'женщина',  'zhenshchina',  'boireannach',  'жена',  'zhena',  'žena',  'ženska',  'mujer',  'kvinna',  'хатын-кыз',  'zhinka',  'Жінка',  'fenyw',  
+                'פרוי',  'կին',  'qadın',  'নারী',  '女人',  'nǚrén',  'ქალი',  'સ્ત્રી',  'महिला',  'poj niam',  '女性',  'ಮಹಿಳೆ',  'әйел',  'ស្ត្រី',  'yeoja',
+                '여자',  'аял',  'ແມ່ຍິງ',  'സ്ത്രീ',  'स्त्री',  'эмэгтэй',  'မိန်းမ',  'महिला',  'ମହିଳା',  'ښځه',  '.ਰਤ',  'عورت',  'කාන්තාවක්',  'зан',  'பெண்',  
+                'మహిళ',  'หญิง',  'kadın',  'aýal',  'عورت',  'ئايال',  'ayol',  'đàn bà',  'امرأة' ,'אִשָׁה', 'jin', 'زن', 'vrou', 'ሴት', 'mkazi', 'mace', 'nwaanyị'
+                , 'umugore', 'mosali', 'mukadzi', 'naag', 'mwanamke', 'umfazi', 'obinrin', 'owesifazane', 'babaye', 'babae', 'wahine', 'wanita', 'wédok', 'vehivavy',
+                'wanita', 'wahine', 'fafine', 'awéwé', 'virino', 'fanm', 'femina', 'imra ah')
+
+# List of words that refer to males
+ManWords <- c('male', 'man','guy','gentleman', 'male', 'dude', 'lad', 'fella', 'gent', 'njeri', 'gizon', 'чалавек', 'čovjek', 'мъж', 'home', 'omu', 'čovjek', 
+              'muž', 'mand', 'man', 'mees', 'mies', 'homme', 'man', 'home', 'Mann', 'ándras', 'άνδρας', 'Férfi', 'Maður', 'fear', 'uomo', 'vīrietis', 'vyras', 
+              'Mann', 'човек', 'bniedem', 'Mann', 'człowiek', 'homem', 'om', 'человек', 'chelovek', 'dhuine', 'chovek', 'човек', 'muž', 'Moški', 'hombre', 'man', 
+              'кеше', 'מענטש', 'insan', 'মানুষ', 'rén', '人', 'კაცი', 'માણસ', 'आदमी', 'txiv neej', 'おとこ', 'ವ್ಯಕ್ತಿ', 'адам', 'បុរសម្នាក់', '남자', 'namja', 
+              'адам', 'ຜູ້ຊາຍ', 'മനുഷ്യൻ', 'मनुष्य', 'хүн', 'လူကို', 'मानिस', 'ମଣିଷ', 'سړی', 'ਆਦਮੀ', 'ماڻهو', 'මිනිසා', 'одам', 'ஆண்', 'మనిషి', 'ชาย', 'adam', 'ada
+             m', 'آدمی', 'man', 'kishi', 'Đàn ông', 'رجل', 'rajul', 'איש', 'مرد', 'man', 'ሰው', 'mwamuna', 'mutumin', 'nwoke', 'umuntu', 'monna', 'murume', 'nin', '
+             mtu', 'umntu', 'ọkunrin', 'indoda', 'lalaki', 'lalaki', 'kāne', 'manusia', 'wong', 'olona', 'lelaki', 'tangata', 'tamaloa', 'lalaki', 'viro', 'nonm', 'homine')
+
+# Create female and male data frames, with one column being "woman" and one "man", respective 
+WomanDF <- data.frame(WomanWords,"woman")
+ManDF <- data.frame(ManWords,"man")
+
+# Rename the columns
+names(WomanDF) <- c("Term", "Gender")
+names(ManDF) <- c("Term", "Gender")
+
+# Combine the two data frames
+GenderWords <- rbind(WomanDF, ManDF)
+
+# Delete the old files that are no longer needed
+rm(WomanWords, ManWords, WomanDF, ManDF)
+
+
+
+
+
+
+
+
 
 ## Defaults all records to the first demographic
 LHDD$Gender<-GenderLookup[1,1]
@@ -185,6 +230,13 @@ for(i in 1:nrow(LHDD)) {
 LHDD$NameRand <- runif(Headcount, min=0, max=1)
 
 ## If there is no "Male" and "Female" gender already created, it defaults everyone to NonBinary so the names will be pulled randomly without regard to gender
+
+
+
+
+
+
+
 if ('Gender' %in% names(LHDD) && any(LHDD$Gender=="Male") && any(LHDD$Gender=="Female")) {
     LHDD$TempGender <- LHDD$Gender
   } else {
