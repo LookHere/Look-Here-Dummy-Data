@@ -109,11 +109,11 @@ The last section will take the final file and export it to a .csv file on the us
 - [X] Have the system create realistic dates (hire, term, etc.)
 - [X] Develop compensation data, related to level
 - [X] Pull random names, related to gender and location
-- [X] Look up the user entered gender by a list of gender words from multiple langages to determine the gender of the name
+- [X] Look up the user entered gender (by a list of gender words from multiple langages) so the name matches the employee's gender
 - [ ] Build out location so the user can decide percentages of each location
 - [ ] Generate job titles, related to level
 - [ ] Generate benefit and dependent information
-- [ ] Generate paroll data
+- [ ] Generate payroll data
 - [ ] Generate a table of actions (hire, term, promotion, transfer, etc.)
 - [ ] Time keeping data (hours worked, time off, etc.)
 - [ ] Generate canidate data for a recruiting funnel
