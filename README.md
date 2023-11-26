@@ -122,3 +122,4 @@ The last section will take the final file and export it to a .csv file on the us
 - [ ] Currently the system is built off of a .csv template file; have something that looks at live data and builds that .csv file
 - [ ] Develop this into a package so it's easier to run
 - [ ] Develop this into a shiny page so it doesn't have to be run in R
+- [ ] Integrate into an [image generator](https://www.youtube.com/watch?v=kXJyUsYeIJ4) to create headshots of employees based on the random data we created
